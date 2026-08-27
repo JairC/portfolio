@@ -1,0 +1,62 @@
+.card {
+  display: block;
+  text-decoration: none;
+}
+
+.plate {
+  height: 220px;
+}
+@media (min-width: 768px) {
+  .plate {
+    height: 440px;
+  }
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 22px;
+}
+@media (min-width: 768px) {
+  .body {
+    gap: 16px;
+    padding-top: 32px;
+  }
+}
+
+.title {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-size: var(--title-s);
+  line-height: var(--title-s-lh);
+  letter-spacing: var(--display-tracking-tight);
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+@media (min-width: 768px) {
+  .title {
+    font-size: var(--display-m);
+    line-height: var(--display-m-lh);
+  }
+}
+
+.description {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: var(--body-s);
+  line-height: var(--body-s-lh);
+  color: var(--text-muted);
+  text-wrap: pretty;
+}
+@media (min-width: 768px) {
+  .description {
+    font-size: var(--lede);
+    line-height: var(--lede-lh);
+  }
+}
+
+.stat {
+  padding-top: 8px;
+}

@@ -1,0 +1,44 @@
+.eyebrow {
+  font-family: var(--font-mono);
+  font-weight: 400;
+}
+
+.meta {
+  color: var(--text-meta);
+}
+.accent {
+  color: var(--text-accent);
+}
+.primary {
+  color: var(--text-primary);
+}
+
+.small {
+  font-size: var(--mono-xs);
+  line-height: var(--mono-xs-lh);
+  letter-spacing: var(--mono-tracking-widest);
+}
+.medium {
+  font-size: var(--mono-s);
+  line-height: var(--mono-s-lh);
+  letter-spacing: var(--mono-tracking-wide);
+}
+.large {
+  font-size: var(--mono);
+  line-height: var(--mono-lh);
+  letter-spacing: var(--mono-tracking);
+}
+
+/* small on mobile, medium on desktop — used where the design scales the eyebrow with density */
+.responsive {
+  font-size: var(--mono-xs);
+  line-height: var(--mono-xs-lh);
+  letter-spacing: var(--mono-tracking-widest);
+}
+@media (min-width: 768px) {
+  .responsive {
+    font-size: var(--mono-s);
+    line-height: var(--mono-s-lh);
+    letter-spacing: var(--mono-tracking-wide);
+  }
+}

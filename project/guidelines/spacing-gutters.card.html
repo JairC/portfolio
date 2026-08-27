@@ -1,0 +1,20 @@
+<!-- @dsCard group="Spacing" viewport="700x160" name="Gutters" subtitle="80px desktop, 24px mobile, no radius anywhere" -->
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><link rel="stylesheet" href="../styles.css">
+<style>
+body{margin:0;background:var(--surface-card);color:var(--text-primary);font-family:var(--font-mono);padding:20px 24px;box-sizing:border-box}
+.row{display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap}
+.sw{display:flex;flex-direction:column;gap:6px;width:104px}
+.chip{height:52px}
+.k{font-size:9px;line-height:12px;letter-spacing:.06em;color:var(--text-meta)}
+.v{font-size:9px;line-height:12px;color:var(--text-muted)}
+</style></head>
+<body>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:center;gap:10px"><div style="width:80px;height:24px;background:var(--surface-image)"></div><span class="v">--page-x 80px · desktop 1440</span></div>
+<div style="display:flex;align-items:center;gap:10px"><div style="width:24px;height:24px;background:var(--surface-image)"></div><span class="v">--page-x-mobile 24px · mobile 390</span></div>
+<div style="display:flex;align-items:center;gap:10px"><div style="width:120px;height:24px;background:var(--surface-image)"></div><span class="v">--chapter-rail 120px + --chapter-gap 100px</span></div>
+</div>
+</body>
+</html>

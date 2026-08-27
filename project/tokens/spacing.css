@@ -1,0 +1,14 @@
+:root{
+  --s-1:4px;  --s-2:8px;  --s-3:12px; --s-4:16px; --s-5:20px;
+  --s-6:24px; --s-8:32px; --s-10:40px; --s-11:44px; --s-12:48px;
+  --s-14:56px; --s-16:64px; --s-18:72px; --s-20:80px; --s-24:100px; --s-30:120px;
+
+  --page-x:80px;
+  --page-x-mobile:24px;
+  --nav-h:82px;
+  --content-max:760px;
+  --chapter-rail:120px;
+  --chapter-gap:100px;
+  --radius:0px;
+  --hairline:1px;
+}

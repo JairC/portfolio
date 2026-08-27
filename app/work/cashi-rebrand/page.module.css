@@ -1,0 +1,90 @@
+.page {
+  background: var(--surface-card);
+}
+
+.titleBlock {
+  padding: 40px var(--page-x-mobile) 32px;
+}
+@media (min-width: 768px) {
+  .titleBlock {
+    padding: 80px var(--page-x) 56px;
+  }
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-size: var(--display-s);
+  line-height: var(--display-s-lh);
+  letter-spacing: var(--display-tracking-tight);
+  color: var(--text-primary);
+  text-wrap: pretty;
+}
+@media (min-width: 768px) {
+  .title {
+    font-size: var(--display-l);
+    line-height: var(--display-l-lh);
+  }
+}
+.title em {
+  font-style: italic;
+  font-weight: 400;
+}
+
+.lede {
+  margin: 20px 0 28px;
+  max-width: 760px;
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: var(--body-s);
+  line-height: var(--body-s-lh);
+  color: var(--text-muted);
+}
+@media (min-width: 768px) {
+  .lede {
+    margin: 24px 0 40px;
+    font-size: var(--lede);
+    line-height: var(--lede-lh);
+  }
+}
+
+.heroPlate {
+  height: 300px;
+}
+@media (min-width: 768px) {
+  .heroPlate {
+    height: 520px;
+    margin: 0 var(--page-x);
+  }
+}
+
+.chapters {
+  padding-top: 44px;
+}
+@media (min-width: 768px) {
+  .chapters {
+    padding-top: 32px;
+  }
+}
+
+.chapter {
+  margin-bottom: 36px;
+}
+@media (min-width: 768px) {
+  .chapter {
+    margin-bottom: 0;
+  }
+}
+
+.chapterPlate {
+  height: 240px;
+  margin: 0 0 36px;
+}
+@media (min-width: 768px) {
+  .chapterPlate {
+    height: 400px;
+    margin: 32px var(--page-x);
+  }
+}

@@ -1,0 +1,380 @@
+<!-- @dsCard group="Portfolio site" viewport="1440x900" name="Portfolio site" subtitle="Home and case study, desktop and mobile" -->
+<!-- @startingPoint section="Screens" subtitle="Portfolio home and case study click-through" viewport="1440x900" -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Portfolio site — UI kit</title>
+<link rel="stylesheet" href="../../styles.css">
+<script type="importmap">{"imports":{
+  "react":"https://esm.sh/react@18.2.0",
+  "react/jsx-runtime":"https://esm.sh/react@18.2.0/jsx-runtime",
+  "react-dom/client":"https://esm.sh/react-dom@18.2.0/client?deps=react@18.2.0"
+}}</script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  body{margin:0;background:var(--surface-page);font-family:var(--font-mono)}
+  a{color:inherit;text-decoration:none}
+  a:hover{color:var(--link-hover)}
+  #chrome{position:sticky;top:0;z-index:10;display:flex;gap:10px;align-items:center;padding:12px 16px;background:var(--surface-inverse);color:var(--text-inverse);font-size:10px;letter-spacing:.06em}
+  #chrome button{font:inherit;font-family:var(--font-mono);padding:7px 14px;border:none;cursor:pointer;background:transparent;color:var(--text-inverse);box-shadow:inset 0 0 0 1px rgba(237,236,234,.3)}
+  #chrome button[data-on="1"]{background:var(--paper);color:var(--ink)}
+  #stage{padding:24px;display:flex;justify-content:center}
+  #scaler{transform-origin:top center}
+  .frame{background:var(--surface-card);box-shadow:0 1px 0 rgba(14,14,12,.14)}
+</style>
+</head>
+<body>
+<div id="chrome"></div>
+<div id="stage"><div id="scaler"><div id="root"></div></div></div>
+
+<script type="text/jsx" id="app">
+import React, { useState } from 'react';
+import { createRoot } from 'react-dom/client';
+
+const V = (t) => `var(${t})`;
+
+function Button({children, variant='primary', href='#', onClick, style={}}) {
+  const [h, setH] = useState(false);
+  const base = {display:'inline-flex',alignItems:'center',justifyContent:'center',padding:'16px 32px',fontFamily:V('--font-mono'),fontSize:V('--mono'),lineHeight:V('--mono-lh'),letterSpacing:V('--mono-tracking'),transition:'background 120ms linear,color 120ms linear'};
+  const variants = {
+    primary:{background:h?V('--button-fill-hover'):V('--button-fill'),color:V('--text-inverse')},
+    outline:{background:h?V('--button-fill'):'transparent',color:h?V('--text-inverse'):V('--text-primary'),boxShadow:`inset 0 0 0 1px ${h?V('--button-fill'):V('--border-button')}`},
+  };
+  return <a href={href} onClick={onClick} onMouseEnter={()=>setH(true)} onMouseLeave={()=>setH(false)} style={{...base,...variants[variant],...style}}>{children}</a>;
+}
+
+function Eyebrow({children, tone='meta', size='small', style={}}) {
+  const tones={meta:V('--text-meta'),accent:V('--text-accent'),primary:V('--text-primary')};
+  const sizes={small:{fontSize:V('--mono-xs'),lineHeight:V('--mono-xs-lh'),letterSpacing:V('--mono-tracking-widest')},medium:{fontSize:V('--mono-s'),lineHeight:V('--mono-s-lh'),letterSpacing:V('--mono-tracking-wide')},large:{fontSize:V('--mono'),lineHeight:V('--mono-lh'),letterSpacing:V('--mono-tracking')}};
+  return <span style={{fontFamily:V('--font-mono'),color:tones[tone],...sizes[size],...style}}>{children}</span>;
+}
+
+function Rule({style={}}) { return <div style={{height:1,background:V('--border-hairline'),...style}} />; }
+
+function ImagePlate({height=400, chip, label, style={}}) {
+  return (
+    <div style={{height,background:V('--surface-image'),position:'relative',...style}}>
+      {chip ? <span style={{position:'absolute',left:24,top:24,padding:'9px 18px',background:V('--surface-card'),fontFamily:V('--font-mono'),fontSize:V('--mono'),letterSpacing:V('--mono-tracking'),color:V('--text-primary')}}>{chip}</span> : null}
+      {label ? <span style={{position:'absolute',left:20,top:16,fontFamily:V('--font-mono'),fontSize:V('--mono-s'),color:V('--text-muted')}}>{label}</span> : null}
+    </div>
+  );
+}
+
+function MetricStat({value, label, size='large', layout='inline', pending=false, style={}}) {
+  const sizes={xlarge:V('--stat-xl'),large:V('--stat-l'),medium:V('--stat-m')};
+  const v = pending
+    ? {fontFamily:V('--font-display'),fontWeight:300,fontSize:sizes[size],lineHeight:sizes[size],color:V('--text-meta'),border:`1px dashed ${V('--border-dashed')}`,padding:'0 10px',alignSelf:'flex-start'}
+    : {fontFamily:V('--font-display'),fontOpticalSizing:'auto',fontWeight:300,fontSize:sizes[size],lineHeight:sizes[size],letterSpacing:V('--stat-tracking'),color:V('--text-stat')};
+  const wrap = layout==='inline' ? {display:'flex',alignItems:'baseline',gap:16} : {display:'flex',flexDirection:'column',gap:5};
+  return <div style={{...wrap,...style}}><span style={v}>{pending?'TBD':value}</span><span style={{fontFamily:V('--font-mono'),fontSize:V('--mono-xs'),lineHeight:V('--mono-xs-lh'),letterSpacing:V('--mono-tracking-wide'),color:V('--text-meta')}}>{label}</span></div>;
+}
+
+function PlaceholderSlot({children, size='block', style={}}) {
+  const sizes={inline:{padding:'2px 6px',display:'inline-block'},chip:{padding:'7px 10px',alignSelf:'flex-start'},block:{padding:24}};
+  return <div style={{border:`1px dashed ${V('--border-dashed')}`,fontFamily:V('--font-mono'),fontSize:V('--mono'),lineHeight:V('--mono-lh'),color:V('--text-meta'),...sizes[size],...style}}>{children}</div>;
+}
+
+function Navbar({density='desktop', activeLink, onNavigate}) {
+  const m = density==='mobile';
+  return (
+    <nav style={{display:'flex',alignItems:'center',justifyContent:'space-between',height:m?'auto':V('--nav-h'),padding:m?'20px 24px':'32px 80px',boxSizing:'border-box',borderBottom:`1px solid ${V('--border-hairline')}`}}>
+      <span style={{fontFamily:V('--font-mono'),fontWeight:700,fontSize:m?V('--mono-m'):V('--mono-l'),color:V('--text-primary')}}>papi(r)</span>
+      <div style={{display:'flex',gap:m?20:32,fontFamily:V('--font-mono'),fontSize:m?V('--mono-s'):V('--mono'),letterSpacing:V('--mono-tracking'),color:V('--text-muted')}}>
+        {['PROJECTS','ABOUT','CONTACT'].map(l=>(
+          <a key={l} href="#" onClick={e=>{e.preventDefault();onNavigate&&onNavigate(l);}} style={{color:l===activeLink?V('--text-primary'):'inherit'}}>{l}</a>
+        ))}
+      </div>
+    </nav>
+  );
+}
+
+function Footer({density='desktop'}) {
+  const m = density==='mobile';
+  const t = {fontFamily:V('--font-mono'),fontSize:V('--mono-m'),lineHeight:'100%'};
+  const cols = [
+    ['CONTACT',['hi@yourname.com','+52 33 0000 0000']],
+    ['WORK',['Projects','Case Studies']],
+    ['SOCIAL',['LinkedIn','Behance','Dribbble']],
+  ];
+  if (m) return (
+    <footer style={{background:V('--surface-inverse'),display:'flex',flexDirection:'column',gap:24,padding:'32px 24px'}}>
+      <div style={{display:'flex',flexDirection:'column',gap:8,...t}}><span style={{color:V('--text-inverse-muted')}}>CONTACT</span><span style={{color:V('--text-inverse')}}>hi@yourname.com</span><span style={{color:V('--text-inverse')}}>+52 33 0000 0000</span></div>
+      <div style={{display:'flex',gap:32,color:V('--text-inverse'),...t}}><span>Projects</span><span>LinkedIn</span><span>Behance</span></div>
+      <span style={{color:V('--text-meta'),...t}}>© 2026 Your Name</span>
+    </footer>
+  );
+  return (
+    <footer style={{height:184,boxSizing:'border-box',background:V('--surface-inverse'),display:'flex',justifyContent:'space-between',alignItems:'flex-start',padding:'40px 80px'}}>
+      {cols.map(([h,items])=>(
+        <div key={h} style={{display:'flex',flexDirection:'column',gap:8,...t}}>
+          <span style={{color:V('--text-inverse-muted')}}>{h}</span>
+          {items.map(i=><span key={i} style={{color:V('--text-inverse')}}>{i}</span>)}
+        </div>
+      ))}
+      <span style={{color:V('--text-meta'),...t}}>© 2026 Your Name</span>
+    </footer>
+  );
+}
+
+function HeroStatement({children, intro, meta=[], actions, density='desktop'}) {
+  const m = density==='mobile';
+  return (
+    <header style={{padding:m?'48px 24px 40px':'120px 80px 96px',borderBottom:`1px solid ${V('--border-hairline')}`}}>
+      <h1 style={{margin:0,maxWidth:m?'none':1180,fontFamily:V('--font-display'),fontOpticalSizing:'auto',fontWeight:300,fontSize:m?V('--display-s'):V('--display-xl'),lineHeight:m?V('--display-s-lh'):V('--display-xl-lh'),letterSpacing:V('--display-tracking'),color:V('--text-primary'),textWrap:'balance'}}>{children}</h1>
+      <div style={{display:'flex',flexDirection:m?'column':'row',gap:m?28:72,marginTop:m?28:56,fontFamily:V('--font-mono'),fontSize:V('--mono'),lineHeight:'20px',letterSpacing:V('--mono-tracking'),color:V('--text-muted')}}>
+        {intro?<div style={{maxWidth:m?'none':440}}>{intro}</div>:null}
+        <div style={{display:'grid',gridTemplateColumns:m?'auto 1fr':'auto auto',gap:'8px 20px',color:V('--text-meta')}}>
+          {meta.map(r=>(
+            <React.Fragment key={r[0]}>
+              <span>{r[0]}</span>
+              <span style={r[2]?{color:V('--text-meta'),border:`1px dashed ${V('--border-dashed')}`,padding:'1px 6px',justifySelf:'start'}:{color:V('--text-primary')}}>{r[2]?'TBD':r[1]}</span>
+            </React.Fragment>
+          ))}
+        </div>
+      </div>
+      {actions?<div style={{display:'flex',flexDirection:m?'column':'row',gap:m?12:16,alignItems:m?'stretch':'center',marginTop:m?32:48}}>{actions}</div>:null}
+    </header>
+  );
+}
+
+function FeaturedProject({eyebrow='FEATURED — 01', category, title, description, stat, statLabel, statPending=false, density='desktop', onClick, style={}}) {
+  const m = density==='mobile';
+  return (
+    <a href="#" onClick={onClick} style={{display:'block',...style}}>
+      <ImagePlate height={m?220:440} chip={category} />
+      <div style={{display:'flex',flexDirection:'column',gap:m?12:16,paddingTop:m?22:32}}>
+        <Eyebrow tone={eyebrow.indexOf('FEATURED')===0?'accent':'meta'} size={m?'small':'medium'}>{eyebrow}</Eyebrow>
+        <span style={{fontFamily:V('--font-display'),fontOpticalSizing:'auto',fontWeight:300,fontSize:m?V('--title-s'):V('--display-m'),lineHeight:m?V('--title-s-lh'):V('--display-m-lh'),letterSpacing:V('--display-tracking-tight'),color:V('--text-primary'),overflowWrap:'anywhere'}}>{title}</span>
+        {description
+          ? <span style={{fontFamily:V('--font-display'),fontWeight:300,fontSize:m?V('--body-s'):V('--lede'),lineHeight:m?V('--body-s-lh'):V('--lede-lh'),color:V('--text-muted'),textWrap:'pretty'}}>{description}</span>
+          : <PlaceholderSlot size="chip">ONE-LINE DESCRIPTION — TBD</PlaceholderSlot>}
+        <MetricStat value={stat} label={statLabel} pending={statPending} size={m?'large':'xlarge'} layout={m?'stacked':'inline'} style={{paddingTop:8}} />
+      </div>
+    </a>
+  );
+}
+
+function ProjectRow({index, category, title, description, stat, statLabel, pending=false, onClick}) {
+  return (
+    <a href="#" onClick={onClick} style={{display:'flex',gap:56,alignItems:'center',justifyContent:'space-between',padding:'40px 0'}}>
+      <div style={{display:'flex',flexDirection:'column',gap:14,flexGrow:1,minWidth:0}}>
+        <Eyebrow size="medium">{index}{category?' — '+category:''}</Eyebrow>
+        <span style={{fontFamily:V('--font-display'),fontOpticalSizing:'auto',fontWeight:300,fontSize:V('--title'),lineHeight:V('--title-lh'),letterSpacing:V('--display-tracking-tight'),color:V('--text-primary'),overflowWrap:'anywhere'}}>{title}</span>
+        {pending
+          ? <PlaceholderSlot size="chip">ONE-LINE DESCRIPTION — TBD</PlaceholderSlot>
+          : <span style={{fontFamily:V('--font-display'),fontWeight:300,fontSize:V('--body'),lineHeight:V('--body-lh'),color:V('--text-muted'),maxWidth:520,textWrap:'pretty'}}>{description}</span>}
+        <MetricStat value={stat} label={statLabel} pending={pending} size="large" style={{paddingTop:6}} />
+      </div>
+      <div style={{width:360,height:230,background:V('--surface-image'),flexShrink:0}} />
+    </a>
+  );
+}
+
+function ChapterBlock({number, label, heading, active=false, density='desktop', style={}}) {
+  const m = density==='mobile';
+  if (m) return (
+    <section style={{padding:'0 24px',...style}}>
+      <div style={{fontFamily:V('--font-mono'),fontSize:V('--mono-s'),lineHeight:V('--mono-s-lh'),color:V('--text-accent'),marginBottom:14}}>{number} — {label}</div>
+      <h2 style={{margin:'0 0 16px',fontFamily:V('--font-display'),fontWeight:300,fontSize:V('--subtitle'),lineHeight:V('--subtitle-lh'),letterSpacing:V('--display-tracking-tight'),color:V('--text-primary')}}>{heading}</h2>
+      <PlaceholderSlot style={{padding:18}}>BODY COPY PLACEHOLDER</PlaceholderSlot>
+    </section>
+  );
+  return (
+    <section style={{display:'flex',gap:100,padding:'32px 80px',alignItems:'flex-start',...style}}>
+      <div style={{display:'flex',flexDirection:'column',gap:4,width:120,flexShrink:0}}>
+        <span style={{fontFamily:V('--font-display'),fontWeight:300,fontSize:12,lineHeight:'100%',color:active?V('--text-accent'):V('--border-dashed')}}>{number}</span>
+        <span style={{fontFamily:V('--font-mono'),fontSize:V('--mono-s'),lineHeight:V('--mono-s-lh'),letterSpacing:'0.01em',color:V('--text-meta')}}>{label}</span>
+      </div>
+      <div style={{flexGrow:1,maxWidth:760}}>
+        <h2 style={{margin:'0 0 18px',fontFamily:V('--font-display'),fontOpticalSizing:'auto',fontWeight:300,fontSize:V('--heading'),lineHeight:V('--heading-lh'),letterSpacing:V('--display-tracking-tight'),color:V('--text-primary')}}>{heading}</h2>
+        <PlaceholderSlot>BODY COPY PLACEHOLDER — 40 to 60 words.</PlaceholderSlot>
+      </div>
+    </section>
+  );
+}
+
+function ResultsBand({value, density='desktop'}) {
+  const m = density==='mobile';
+  return (
+    <section style={{display:'flex',flexDirection:'column',gap:20,alignItems:'center',padding:m?'40px 24px':'90px 80px',borderTop:`1px solid ${V('--border-hairline')}`,borderBottom:`1px solid ${V('--border-hairline')}`}}>
+      <span style={{fontFamily:V('--font-mono'),fontWeight:700,fontSize:V('--mono-m'),lineHeight:'100%',color:V('--text-meta')}}>RESULTS</span>
+      <span style={{fontFamily:V('--font-display'),fontOpticalSizing:'auto',fontWeight:300,fontSize:m?40:V('--display-m'),lineHeight:m?'44px':V('--display-m-lh'),letterSpacing:V('--stat-tracking'),color:V('--text-stat')}}>{value}</span>
+      <Rule style={{alignSelf:'stretch'}} />
+      <PlaceholderSlot style={{padding:'14px 24px',textAlign:'center'}}>RESULTS CAPTION PLACEHOLDER</PlaceholderSlot>
+    </section>
+  );
+}
+
+function NextProjectBand({title, density='desktop', onClick}) {
+  const m = density==='mobile';
+  const [h,setH] = useState(false);
+  const bg = h?V('--surface-hover'):'transparent';
+  if (m) return (
+    <a href="#" onClick={onClick} style={{display:'block',padding:'36px 24px 40px',borderTop:`1px solid ${V('--border-hairline')}`,background:bg}} onMouseEnter={()=>setH(true)} onMouseLeave={()=>setH(false)}>
+      <div style={{fontFamily:V('--font-mono'),fontSize:V('--mono'),lineHeight:V('--mono-lh'),color:V('--text-meta'),marginBottom:8}}>NEXT PROJECT</div>
+      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+        <span style={{fontFamily:V('--font-display'),fontWeight:300,fontSize:V('--subtitle'),lineHeight:V('--subtitle-lh'),letterSpacing:V('--stat-tracking'),color:V('--text-primary')}}>{title}</span>
+        <span style={{fontFamily:V('--font-display'),fontWeight:300,fontSize:32,color:V('--text-accent')}}>→</span>
+      </div>
+    </a>
+  );
+  return (
+    <a href="#" onClick={onClick} onMouseEnter={()=>setH(true)} onMouseLeave={()=>setH(false)} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'100px 80px',background:bg}}>
+      <div style={{display:'flex',flexDirection:'column',gap:8,flexGrow:1,marginRight:60}}>
+        <span style={{fontFamily:V('--font-mono'),fontSize:V('--mono'),lineHeight:V('--mono-lh'),color:V('--text-meta')}}>NEXT PROJECT</span>
+        <span style={{fontFamily:V('--font-display'),fontOpticalSizing:'auto',fontWeight:300,fontSize:V('--display-l'),lineHeight:V('--display-l-lh'),letterSpacing:V('--display-tracking-tight'),color:V('--text-primary'),whiteSpace:'nowrap'}}>{title} <span style={{color:V('--text-accent')}}>→</span></span>
+      </div>
+      <div style={{width:480,height:280,background:V('--surface-image'),flexShrink:0}} />
+    </a>
+  );
+}
+
+function ContactBand({density='desktop', withRule=true}) {
+  const m = density==='mobile';
+  return (
+    <section style={{display:'flex',flexDirection:'column',gap:m?16:20,alignItems:'center',padding:m?'56px 24px':'100px 80px',borderTop:withRule?`1px solid ${V('--border-hairline')}`:'none'}}>
+      <span style={{fontFamily:V('--font-display'),fontOpticalSizing:'auto',fontWeight:300,fontSize:m?V('--title-s'):V('--display-l'),lineHeight:m?'36px':V('--display-l-lh'),letterSpacing:V('--display-tracking-tight'),color:V('--text-primary')}}>Let's work together</span>
+      <Button variant="outline">GET IN TOUCH →</Button>
+    </section>
+  );
+}
+
+function MetaGrid({items, columns=4}) {
+  return (
+    <div style={{display:'grid',gridTemplateColumns:`repeat(${columns},1fr)`,gap:'18px 16px',fontFamily:V('--font-mono'),fontSize:V('--mono-s'),lineHeight:V('--mono-lh'),paddingTop:22,borderTop:`1px solid ${V('--border-hairline')}`}}>
+      {items.map(r=>(
+        <div key={r[0]}>
+          <div style={{color:V('--text-meta'),marginBottom:5}}>{r[0]}</div>
+          <div style={r[2]?{color:V('--text-meta'),border:`1px dashed ${V('--border-dashed')}`,padding:'2px 6px',display:'inline-block'}:{color:V('--text-primary')}}>{r[2]?'TBD':r[1]}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+const PROJECTS = [
+  {index:'02',category:'BRAND · PRODUCT',title:'cashi_rebrand',description:'A full IA rebuild that cut support tickets in half.',stat:'700K+',statLabel:'INSTALLS'},
+  {index:'03',category:'ENTERPRISE TOOLING',title:'ircode_admin_panel',statLabel:'HEADLINE METRIC',pending:true},
+  {index:'04',category:'ONBOARDING',title:'ircode_progressive_onboarding',statLabel:'HEADLINE METRIC',pending:true},
+  {index:'05',category:'EDITORIAL · WEB',title:'fil',statLabel:'HEADLINE METRIC',pending:true},
+];
+
+function HomeScreen({density, onOpen}) {
+  const m = density==='mobile';
+  const open = e => {e.preventDefault(); onOpen();};
+  return (
+    <div style={{background:V('--surface-card')}}>
+      <Navbar density={density} activeLink="PROJECTS" onNavigate={()=>onOpen()} />
+      <HeroStatement density={density}
+        intro="Designer and consultant — turning ambiguous problems into interfaces people trust."
+        meta={[['ROLE','PRODUCT DESIGN / UX'],['BASE',null,true],['SINCE',null,true]]}
+        actions={<><Button variant="primary">CONTACT →</Button><Button variant="outline">DOWNLOAD CV ↓</Button></>}>
+        Strategy first.<br />Then design <em style={{fontStyle:'italic',fontWeight:400}}>that works</em>.
+      </HeroStatement>
+      <div style={{padding:m?'32px 24px 40px':'56px 80px 72px'}}>
+        <Eyebrow size="medium" style={{display:'block',marginBottom:m?20:28}}>PROJECTS(05)</Eyebrow>
+        <FeaturedProject density={density} category="FINTECH · WALLET" title="cashi_bill_payments"
+          description="Turning a stressful payment flow into one users trust."
+          stat="81.8% → 85.1%" statLabel="TRANSACTION SUCCESS" onClick={open}
+          style={{marginBottom:m?32:56}} />
+        {PROJECTS.map((p,i)=>(
+          <React.Fragment key={p.index}>
+            <Rule />
+            {m
+              ? <FeaturedProject density="mobile" eyebrow={p.index+' — '+p.category} category={p.category} title={p.title} description={p.description} stat={p.stat} statLabel={p.statLabel} statPending={p.pending} onClick={open} style={{margin:'24px 0 32px'}} />
+              : <ProjectRow {...p} onClick={open} />}
+          </React.Fragment>
+        ))}
+      </div>
+      <ContactBand density={density} />
+      <Footer density={density} />
+    </div>
+  );
+}
+
+const CHAPTERS = [['01','CONTEXT'],['02','PROBLEM'],['03','APPROACH'],['04','SYSTEM']];
+
+function CaseStudyScreen({density, onBack}) {
+  const m = density==='mobile';
+  const back = e => {e.preventDefault(); onBack();};
+  return (
+    <div style={{background:V('--surface-card')}}>
+      <Navbar density={density} activeLink="PROJECTS" onNavigate={()=>onBack()} />
+      <div style={{padding:m?'40px 24px 32px':'80px 80px 56px'}}>
+        <h1 style={{margin:0,fontFamily:V('--font-display'),fontOpticalSizing:'auto',fontWeight:300,fontSize:m?V('--display-s'):V('--display-l'),lineHeight:m?V('--display-s-lh'):V('--display-l-lh'),letterSpacing:V('--display-tracking-tight'),color:V('--text-primary'),textWrap:'pretty'}}>
+          Digital Wallet — <em style={{fontStyle:'italic',fontWeight:400}}>Relaunch</em>
+        </h1>
+        <p style={{margin:m?'20px 0 28px':'24px 0 40px',maxWidth:760,fontFamily:V('--font-display'),fontWeight:300,fontSize:m?V('--body-s'):V('--lede'),lineHeight:m?V('--body-s-lh'):V('--lede-lh'),color:V('--text-muted')}}>
+          A full IA rebuild that cut support tickets in half and lifted installs past 700K.
+        </p>
+        <MetaGrid columns={m?2:4} items={[['ROLE',null,true],['DURATION',null,true],['TEAM',null,true],['SCOPE','IDENTITY, SYSTEM, APP']]} />
+      </div>
+      <ImagePlate height={m?300:520} label="HERO PLACEHOLDER" style={m?{}:{margin:'0 80px'}} />
+      <div style={{paddingTop:m?44:32}}>
+        {CHAPTERS.map(([n,l],i)=>(
+          <React.Fragment key={n}>
+            <ChapterBlock density={density} number={n} label={l} heading="Chapter heading — TBD" active={i===0} style={m?{marginBottom:36}:{}} />
+            {i===0 ? <ImagePlate height={m?240:400} label="BEFORE / AFTER PLACEHOLDER" style={{margin:m?'0 0 36px':'32px 80px'}} /> : null}
+          </React.Fragment>
+        ))}
+      </div>
+      <ResultsBand density={density} value="700K+ installs" />
+      <NextProjectBand density={density} title="ircode_admin_panel" onClick={back} />
+      <ContactBand density={density} withRule={m} />
+      <Footer density={density} />
+    </div>
+  );
+}
+
+function App() {
+  const [screen, setScreen] = useState('home');
+  const [density, setDensity] = useState('desktop');
+  React.useEffect(()=>{
+    const chrome = document.getElementById('chrome');
+    chrome.innerHTML = '';
+    const label = document.createElement('span');
+    label.textContent = 'PORTFOLIO UI KIT';
+    label.style.marginRight = '12px';
+    chrome.appendChild(label);
+    [['HOME','home'],['CASE STUDY','case']].forEach(([t,v])=>{
+      const b=document.createElement('button'); b.textContent=t; b.dataset.on = screen===v?'1':'0';
+      b.onclick=()=>setScreen(v); chrome.appendChild(b);
+    });
+    const sp=document.createElement('span'); sp.style.width='16px'; chrome.appendChild(sp);
+    [['1440','desktop'],['390','mobile']].forEach(([t,v])=>{
+      const b=document.createElement('button'); b.textContent=t; b.dataset.on = density===v?'1':'0';
+      b.onclick=()=>setDensity(v); chrome.appendChild(b);
+    });
+  },[screen,density]);
+  const width = density==='mobile' ? 390 : 1440;
+  React.useEffect(()=>{
+    const fit = () => {
+      const avail = document.getElementById('stage').clientWidth - 48;
+      const s = Math.min(1, avail / width);
+      document.getElementById('scaler').style.transform = 'scale(' + s + ')';
+    };
+    fit();
+    window.addEventListener('resize', fit);
+    return () => window.removeEventListener('resize', fit);
+  },[width]);
+  return (
+    <div className="frame" style={{width}}>
+      {screen==='home'
+        ? <HomeScreen density={density} onOpen={()=>setScreen('case')} />
+        : <CaseStudyScreen density={density} onBack={()=>setScreen('home')} />}
+    </div>
+  );
+}
+
+createRoot(document.getElementById('root')).render(<App />);
+</script>
+<script>
+window.addEventListener('DOMContentLoaded', async () => {
+  const src = document.getElementById('app').textContent;
+  const code = Babel.transform(src, { presets: ['react'], sourceType: 'module' }).code;
+  await import(URL.createObjectURL(new Blob([code], { type: 'text/javascript' })));
+});
+</script>
+</body>
+</html>

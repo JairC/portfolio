@@ -1,0 +1,7 @@
+.rule {
+  height: 1px;
+  background: var(--border-hairline);
+}
+.strong {
+  background: var(--border-dashed);
+}

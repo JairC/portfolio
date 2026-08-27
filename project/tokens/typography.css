@@ -1,0 +1,36 @@
+:root{
+  --font-display:Fraunces,Georgia,serif;
+  --font-mono:"Space Mono",ui-monospace,Menlo,monospace;
+
+  --display-weight:300;
+  --display-italic-weight:400;
+  --display-tracking:-0.03em;
+  --display-tracking-tight:-0.025em;
+  --stat-tracking:-0.02em;
+
+  --display-xl:96px;   --display-xl-lh:96px;
+  --display-l:72px;    --display-l-lh:72px;
+  --display-m:56px;    --display-m-lh:60px;
+  --display-s:44px;    --display-s-lh:46px;
+  --heading:40px;      --heading-lh:44px;
+  --title:38px;        --title-lh:42px;
+  --title-s:32px;      --title-s-lh:36px;
+  --subtitle:28px;     --subtitle-lh:32px;
+
+  --lede:22px;         --lede-lh:32px;
+  --body:19px;         --body-lh:29px;
+  --body-s:17px;       --body-s-lh:26px;
+  --body-xs:15px;      --body-xs-lh:23px;
+
+  --stat-xl:52px;      --stat-l:34px;      --stat-m:26px;
+
+  --mono-l:13px;       --mono-l-lh:18px;
+  --mono-m:12px;       --mono-m-lh:18px;
+  --mono:11px;         --mono-lh:16px;
+  --mono-s:10px;       --mono-s-lh:14px;
+  --mono-xs:9px;       --mono-xs-lh:12px;
+
+  --mono-tracking:0.008em;
+  --mono-tracking-wide:0.06em;
+  --mono-tracking-widest:0.08em;
+}

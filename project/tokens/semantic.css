@@ -1,0 +1,24 @@
+:root{
+  --text-primary:var(--ink);
+  --text-muted:var(--ink-70);
+  --text-meta:var(--ink-45);
+  --text-stat:var(--verdigris);
+  --text-accent:var(--red);
+  --text-inverse:var(--paper);
+  --text-inverse-muted:var(--ink-70);
+
+  --surface-page:var(--page);
+  --surface-card:var(--paper);
+  --surface-hover:var(--paper-shade);
+  --surface-image:var(--plate);
+  --surface-inverse:var(--ink);
+  --surface-tint:var(--verdigris-tint);
+
+  --border-hairline:var(--line);
+  --border-dashed:var(--line-strong);
+  --border-button:var(--line-strong);
+
+  --button-fill:var(--ink);
+  --button-fill-hover:var(--red);
+  --link-hover:var(--red);
+}
