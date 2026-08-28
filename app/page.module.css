@@ -3,22 +3,11 @@
 }
 
 .work {
-  padding: 32px var(--page-x-mobile) 40px;
-  scroll-margin-top: 24px;
+  padding: 0 var(--page-x-mobile) 40px;
 }
 @media (min-width: 768px) {
   .work {
-    padding: 56px var(--page-x) 72px;
-  }
-}
-
-.eyebrow {
-  display: block;
-  margin-bottom: 20px;
-}
-@media (min-width: 768px) {
-  .eyebrow {
-    margin-bottom: 28px;
+    padding: 0 var(--page-x) 72px;
   }
 }
 

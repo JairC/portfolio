@@ -1,11 +1,21 @@
 import { HeroStatement } from "@/components/sections/HeroStatement.jsx";
 import { ContactBand } from "@/components/sections/ContactBand.jsx";
+import { SectionDivider } from "@/components/sections/SectionDivider.jsx";
 import { FeaturedProject } from "@/components/listings/FeaturedProject.jsx";
 import { ProjectListItem } from "@/components/listings/ProjectListItem.jsx";
 import { Rule } from "@/components/core/Rule.jsx";
 import { Button } from "@/components/core/Button.jsx";
-import { Eyebrow } from "@/components/core/Eyebrow.jsx";
 import styles from "./page.module.css";
+
+const PROJECTS_INTRO = [
+  { text: "Browse", size: "big" },
+  { text: "a", size: "small" },
+  { text: "small", size: "big" },
+  { text: "index", size: "big" },
+  { text: "of", size: "small" },
+  { text: "shipped", size: "big" },
+  { text: "work.", size: "big" },
+];
 
 const PROJECTS = [
   {
@@ -48,10 +58,13 @@ export default function HomePage() {
         Then design <em>that works</em>.
       </HeroStatement>
 
-      <div id="work" className={styles.work}>
-        <Eyebrow size="medium" className={styles.eyebrow}>
-          PROJECTS(05)
-        </Eyebrow>
+      <SectionDivider
+        id="work"
+        ticker="PROJECTS"
+        words={PROJECTS_INTRO}
+        caption="Selected for what shipped, not what looked good in a deck."
+      />
+      <div className={styles.work}>
         <FeaturedProject
           category="FINTECH · WALLET"
           title="cashi_bill_payments"
