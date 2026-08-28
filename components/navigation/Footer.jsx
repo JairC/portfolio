@@ -9,17 +9,19 @@ const DEFAULT_COLUMNS = [
 export function Footer({ columns = DEFAULT_COLUMNS, copyright = "© 2026 Your Name" }) {
   return (
     <footer className={styles.footer}>
-      {columns.map((c) => (
-        <div key={c.heading} className={styles.column}>
-          <span className={styles.heading}>{c.heading}</span>
-          {c.items.map((i) => (
-            <a key={i.text} href={i.href} className={styles.item}>
-              {i.text}
-            </a>
-          ))}
-        </div>
-      ))}
-      <span className={styles.copyright}>{copyright}</span>
+      <div className={styles.inner}>
+        {columns.map((c) => (
+          <div key={c.heading} className={styles.column}>
+            <span className={styles.heading}>{c.heading}</span>
+            {c.items.map((i) => (
+              <a key={i.text} href={i.href} className={styles.item}>
+                {i.text}
+              </a>
+            ))}
+          </div>
+        ))}
+        <span className={styles.copyright}>{copyright}</span>
+      </div>
     </footer>
   );
 }

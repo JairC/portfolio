@@ -1,6 +1,13 @@
 .footer {
+  width: 100%;
   box-sizing: border-box;
   background: var(--surface-inverse);
+}
+
+.inner {
+  max-width: var(--site-frame-max);
+  margin: 0 auto;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
@@ -8,7 +15,7 @@
   padding: 32px var(--page-x-mobile);
 }
 @media (min-width: 768px) {
-  .footer {
+  .inner {
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-start;

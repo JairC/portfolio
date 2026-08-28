@@ -1,5 +1,3 @@
-import { Navbar } from "@/components/navigation/Navbar.jsx";
-import { Footer } from "@/components/navigation/Footer.jsx";
 import { ChapterBlock } from "@/components/sections/ChapterBlock.jsx";
 import { ResultsBand } from "@/components/sections/ResultsBand.jsx";
 import { NextProjectBand } from "@/components/sections/NextProjectBand.jsx";
@@ -22,8 +20,6 @@ const CHAPTERS = [
 export default function CashiRebrandPage() {
   return (
     <div className={styles.page}>
-      <Navbar activeLink="PROJECTS" />
-
       <div className={styles.titleBlock}>
         <h1 className={styles.title}>
           Digital Wallet — <em>Relaunch</em>
@@ -53,7 +49,6 @@ export default function CashiRebrandPage() {
       <ResultsBand value="700K+ installs" />
       <NextProjectBand title="ircode_admin_panel" href="/" />
       <ContactBand withRule="mobile" />
-      <Footer />
     </div>
   );
 }

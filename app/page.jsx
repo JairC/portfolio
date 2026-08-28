@@ -1,5 +1,3 @@
-import { Navbar } from "@/components/navigation/Navbar.jsx";
-import { Footer } from "@/components/navigation/Footer.jsx";
 import { HeroStatement } from "@/components/sections/HeroStatement.jsx";
 import { ContactBand } from "@/components/sections/ContactBand.jsx";
 import { FeaturedProject } from "@/components/listings/FeaturedProject.jsx";
@@ -27,7 +25,6 @@ const PROJECTS = [
 export default function HomePage() {
   return (
     <div className={styles.page}>
-      <Navbar activeLink="PROJECTS" />
       <HeroStatement
         intro="Designer and consultant — turning ambiguous problems into interfaces people trust."
         meta={[
@@ -73,7 +70,6 @@ export default function HomePage() {
       </div>
 
       <ContactBand id="contact" />
-      <Footer />
     </div>
   );
 }
