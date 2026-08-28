@@ -22,6 +22,16 @@ body {
   font-family: var(--font-mono);
 }
 
+/* The page renders as a bounded card on the page backdrop above --site-frame-max,
+   rather than stretching edge to edge on wide viewports. */
+.site-frame {
+  max-width: var(--site-frame-max);
+  margin: 0 auto;
+  background: var(--surface-card);
+  box-shadow: 0 1px 0 rgba(14, 14, 12, 0.14);
+  min-height: 100vh;
+}
+
 a {
   color: inherit;
 }
